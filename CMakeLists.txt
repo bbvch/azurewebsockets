@@ -77,9 +77,9 @@ infrastructure/SasToken.cpp
 target_link_libraries(azurewebsockets pthread PocoUtil jsoncpp PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
 set_target_properties(azurewebsockets PROPERTIES VERSION ${Main_VERSION_MAJOR}                                            SOVERSION ${Main_VERSION_MAJOR})
 install(TARGETS azurewebsockets DESTINATION lib/azurewebsockets )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/libuamqp.so DESTINATION lib/azurewebsockets )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so DESTINATION lib/azurewebsockets )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so.6 DESTINATION lib/azurewebsockets )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/azure-c-shared-utility/c/libaziotsharedutil.so DESTINATION lib/azurewebsockets )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libuamqp.so DESTINATION lib/azurewebsockets )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so DESTINATION lib/azurewebsockets )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so.6 DESTINATION lib/azurewebsockets )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/azure-c-shared-utility/c/libaziotsharedutil.so DESTINATION lib/azurewebsockets )
 
 
