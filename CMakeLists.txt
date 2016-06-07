@@ -80,3 +80,6 @@ infrastructure/SasToken.cpp
 #set(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
 target_link_libraries(azurewebsockets pthread PocoUtil jsoncpp PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
 
+
+install(TARGETS azurewebsockets
+LIBRARY DESTINATION lib)
