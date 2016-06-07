@@ -16,7 +16,7 @@ set(ROOTDIR ../..)
 
 include_directories(${ROOTDIR}/protocolstack/session/)
 include_directories(${ROOTDIR})
-add_subdirectory ("${ROOTDIR}" ${builddir}/libazurewebsockets)
+find_library(sharedlibs azurewebsockets websockets /usr/local/lib/azurewebsockets)
 
 file(GLOB CLIENT_SOURCES
     client.cpp
@@ -25,7 +25,8 @@ file(GLOB CLIENT_SOURCES
 
 add_executable(standaloneclient ${CLIENT_SOURCES})
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/session)
-target_link_libraries(standaloneclient azurewebsockets)
+#target_link_libraries(standaloneclient azurewebsockets uamqp aziotsharedutil websockets_shared)
+target_link_libraries(standaloneclient ${sharedlibs})
 install(TARGETS standaloneclient DESTINATION bin)
 
 
