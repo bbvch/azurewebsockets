@@ -26,5 +26,6 @@ file(GLOB CLIENT_SOURCES
 add_executable(standaloneclient ${CLIENT_SOURCES})
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/session)
 target_link_libraries(standaloneclient azurewebsockets)
+install(TARGETS standaloneclient DESTINATION bin)
 
 
