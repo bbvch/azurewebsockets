@@ -66,10 +66,6 @@ include_directories (".")
 
 add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/" EXCLUDE_FROM_ALL)
 
-
-
-
-
 #add_library(azurewebsockets STATIC
 add_library(azurewebsockets SHARED
 protocolstack/session/AzureAmqpWs.cpp 
@@ -77,9 +73,7 @@ protocolstack/session/Factory.cpp
 protocolstack/session/iothub_certs/iothub_certs.c
 infrastructure/SasToken.cpp
 )
-#set(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
 target_link_libraries(azurewebsockets pthread PocoUtil jsoncpp PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
+set_target_properties(azurewebsockets PROPERTIES VERSION ${Main_VERSION_MAJOR}                                            SOVERSION ${Main_VERSION_MAJOR})
+install(TARGETS azurewebsockets DESTINATION lib )
 
-
-install(TARGETS azurewebsockets
-LIBRARY DESTINATION lib)
