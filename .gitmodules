@@ -1,0 +1,4 @@
+[submodule "azure-uamqp-c"]
+	path = azure-uamqp-c
+	url = https://github.com/bbvch/azure-uamqp-c.git
+	branch = as_shared_library
