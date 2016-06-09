@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.1)
 set (Main_VERSION_MAJOR 0)
 set (Main_VERSION_MINOR 1)
 
-set (CMAKE_CXX_STANDARD 14)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 add_definitions(-DNO_LOGGING)
 set (use_wsio ON CACHE INTERNAL "")
 set (skip_unittests ON CACHE INTERNAL "")
@@ -57,7 +52,6 @@ file(GLOB SESSION_SOURCES
     protocolstack/session/amqp_websockets/iothub_certs.c
     )
 
-
 #include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/amqp/azure-iot-sdks/c/iothub_client/inc/")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/azure-c-shared-utility/c/inc")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/inc")
@@ -73,6 +67,7 @@ protocolstack/session/Factory.cpp
 protocolstack/session/iothub_certs/iothub_certs.c
 infrastructure/SasToken.cpp
 )
+#set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
 #add_library(uamqp SHARED IMPORTED)
 target_link_libraries(azurewebsockets pthread PocoUtil jsoncpp PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
 set_target_properties(azurewebsockets PROPERTIES VERSION ${Main_VERSION_MAJOR}                                            SOVERSION ${Main_VERSION_MAJOR})
@@ -82,4 +77,8 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libweb
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so.6 DESTINATION lib/azurewebsockets )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/azure-c-shared-utility/c/libaziotsharedutil.so DESTINATION lib/azurewebsockets )
 
-
+#Set Flags has to be at bottom to overwrite above set default rules
+#set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -std=c++14")
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu1x")
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
