@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../Decoder.h"
+#include <protocolstack/presentation/Decoder.h>
 
 #include <protocolstack/application/message/Incoming.h>
 

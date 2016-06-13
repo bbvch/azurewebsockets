@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../Factory.h"
+#include <infrastructure/Factory.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
