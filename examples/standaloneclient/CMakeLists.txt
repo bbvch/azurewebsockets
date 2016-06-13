@@ -10,7 +10,7 @@ set(CMAKE_BINARY_DIR  ${builddir})
 
 set(ROOTDIR ../..)
 
-find_path(INCLUDE_DIRECTORIES libazurewebsockets)
+find_path(INCLUDE_DIRECTORIES libazurewebsockets ${YOCTO_LIBRARY_PATH})
 if(NOT INCLUDE_DIRECTORIES)
 message(FATAL_ERROR "Did not find the include directory")
 endif(NOT INCLUDE_DIRECTORIES)
