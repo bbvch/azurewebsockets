@@ -9,7 +9,6 @@
 #define SESSION
 
 #include "Configuration.h"
-#include "../presentation/Message.h"
 
 #include <string>
 #include <functional>
@@ -17,7 +16,7 @@
 class Session
 {
 public:
-  typedef std::function<void(const presentation::Message&)> Callback;
+  typedef std::function<void(const std::string&)> Callback;
 
   virtual ~Session() = default;
   
@@ -26,7 +25,7 @@ public:
   virtual void connect() = 0;
   virtual void close() = 0;
 
-  virtual void send(const presentation::Message &message) = 0;
+  virtual void send(const std::string &message) = 0;
   virtual void setMessageCallback(Callback function) = 0;
 
 };

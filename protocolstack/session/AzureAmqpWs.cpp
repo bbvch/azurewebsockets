@@ -13,11 +13,11 @@ extern const char iothub_certs[];
 
 const long saslExpirationTime = 60 * 60 * 24 * 365 * 10; //expiration 10 years
 
-static presentation::Message convertMessage(MESSAGE_HANDLE message)
+static std::string convertMessage(MESSAGE_HANDLE message)
 {
     BINARY_DATA data;
     message_get_body_amqp_data(message, 0, &data);
-    return presentation::Message{data.bytes, data.length};
+    return std::string{(const char *)data.bytes, data.length};
 }
 static Session::Callback toCallback( void *ptr)
 {
@@ -191,18 +191,16 @@ void AzureAmqpWs::connect()
     return;
 }
 
-void AzureAmqpWs::send(const presentation::Message &message)
+void AzureAmqpWs::send(const std::string &message)
 {
     MESSAGE_HANDLE messageHandle = message_create();
     /* create a message sender */
-    std::string messageString = message.asString();
 
     //TODO investigate why following does not work / make it work for binary data
     //const unsigned char *message_content{message.asBinary().data()};
-    const unsigned char *message_content{reinterpret_cast <unsigned char const *>(messageString.c_str())};
+    const unsigned char *message_content{reinterpret_cast <unsigned char const *>(message.c_str())};
 
-    size_t message_size = message.asBinary().size();
-    BINARY_DATA binary_data = { message_content, message_size };
+    BINARY_DATA binary_data = { message_content, message.size() };
     message_add_body_amqp_data(messageHandle, binary_data);
 
     if(!messageSender_)

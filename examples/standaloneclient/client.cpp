@@ -12,6 +12,8 @@
 #include <memory>
 #include <iostream>
 #include <set>
+#include <vector>
+#include <string>
 
 class Configuration :
         public session::Configuration
@@ -60,9 +62,9 @@ static void waitForTermination()
     }
 }
 
-static void receiver(const presentation::Message& message)
+static void receiver(const std::string& message)
 {
-    std::cout << "received message: " << message.asString() << std::endl;
+    std::cout << "received message: " << message << std::endl;
 }
 
 int main(int argc, char **argv)
