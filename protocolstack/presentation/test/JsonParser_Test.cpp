@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../JsonParser.h"
+#include <protocolstack/presentation/JsonParser.h>
 
 #include <protocolstack/application/message/Incoming.h>
 

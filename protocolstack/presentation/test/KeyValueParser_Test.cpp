@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../KeyValueParser.h"
+#include <protocolstack/presentation/KeyValueParser.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../KeyValuePrintFormat.h"
+#include <protocolstack/presentation/KeyValuePrintFormat.h>
 
 #include <protocolstack/application/message/Property.h>
 

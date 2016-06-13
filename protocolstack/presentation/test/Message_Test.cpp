@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../Message.h"
+#include <protocolstack/presentation/Message.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

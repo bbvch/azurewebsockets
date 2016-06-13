@@ -8,8 +8,8 @@
 #ifndef PRESENTATION
 #define PRESENTATION
 
-#include "../application/message/Incoming.h"
-#include "../application/message/Outgoing.h"
+#include <protocolstack/application/message/Incoming.h>
+#include <protocolstack/application/message/Outgoing.h>
 #include "Message.h"
 #include "Parser.h"
 #include "Decoder.h"

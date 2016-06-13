@@ -8,7 +8,7 @@
 #ifndef FACTORY_MOCK_H
 #define FACTORY_MOCK_H
 
-#include "../Factory.h"
+#include <infrastructure/Factory.h>
 
 #include <gmock/gmock.h>
 

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../Null.h"
+#include <protocolstack/presentation/Null.h>
 
 #include <protocolstack/application/message/Incoming.h>
 #include <protocolstack/application/message/Outgoing.h>
