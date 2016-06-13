@@ -69,7 +69,6 @@ static void receiver(const std::string& message)
 
 int main(int argc, char **argv)
 {
-    const Factory<Session*> factory = session::factory();
     std::cout << "start...\n";
     const std::vector<std::string> arg{argv, argv+argc};
     std::cout << "vector done...\n";
@@ -82,7 +81,7 @@ int main(int argc, char **argv)
     //std::cout << "parsed commandline...\n";
 
 
-    std::unique_ptr<Session> session{factory.produce("session")};
+    std::unique_ptr<Session> session{session::produce()};
     if(!session)
         throw std::runtime_error("Was not able to create session");
     //std::cout << "Created session...\n";

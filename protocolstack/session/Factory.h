@@ -10,12 +10,10 @@
 
 #include "Session.h"
 
-#include <infrastructure/Factory.h>
-
 namespace session
 {
 
-Factory<Session*> factory();
+Session* produce();
 
 }
 

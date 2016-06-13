@@ -13,16 +13,9 @@
 namespace session
 {
 
-Factory<Session*> factory()
+Session *produce()
 {
-  Factory<Session*> factory;
-  //factory.add("none", []{return new session::Null();});
-  //factory.add("azure-amqp", []{return new AzureAmqp();});
-  factory.add("session", []{return new AzureAmqpWs();});
-  //factory.add("azure-http", []{return new AzureHttp();});
-  //factory.add("azure-mqtt", []{return new AzureMqtt();});
-  //factory.add("simple-mqtt", []{return new SimpleMqtt();});
-  return factory;
+  return new AzureAmqpWs();
 }
 
 }
