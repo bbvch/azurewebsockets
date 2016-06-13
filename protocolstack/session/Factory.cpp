@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "Factory.h"
+#include <protocolstack/session/Factory.h>
 
 #include "AzureAmqpWs.h"
 

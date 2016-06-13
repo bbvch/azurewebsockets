@@ -5,11 +5,11 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "StackFactory.h"
+#include <protocolstack/StackFactory.h>
 
-#include "application/Factory.h"
-#include "session/Factory.h"
-#include "presentation/Factory.h"
+//#include "application/Factory.h"
+#include <protocolstack/session/Factory.h>
+#include <protocolstack/presentation/Factory.h>
 
 StackFactory::StackFactory() :
   applicationFactory{application::factory()},

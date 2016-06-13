@@ -52,7 +52,11 @@ file(GLOB SESSION_SOURCES
     protocolstack/session/amqp_websockets/iothub_certs.c
     )
 
-#include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/amqp/azure-iot-sdks/c/iothub_client/inc/")
+file(GLOB LIBRARY_HEADERS
+    protocolstack/session/*.h
+    protocolstack/presentation/*.h
+    )
+
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/azure-c-shared-utility/c/inc")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/inc")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/protocolstack/session/iothub_certs)
@@ -60,7 +64,6 @@ include_directories (".")
 
 add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/" EXCLUDE_FROM_ALL)
 
-#add_library(azurewebsockets STATIC
 add_library(azurewebsockets SHARED
 protocolstack/session/AzureAmqpWs.cpp 
 protocolstack/session/Factory.cpp 
@@ -68,14 +71,13 @@ protocolstack/session/iothub_certs/iothub_certs.c
 infrastructure/SasToken.cpp
 )
 #set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
-#add_library(uamqp SHARED IMPORTED)
 target_link_libraries(azurewebsockets pthread PocoUtil jsoncpp PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
 set_target_properties(azurewebsockets PROPERTIES VERSION ${Main_VERSION_MAJOR}                                            SOVERSION ${Main_VERSION_MAJOR})
 install(TARGETS azurewebsockets DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libuamqp.so DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so.6 DESTINATION lib)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/azure-c-shared-utility/c/libaziotsharedutil.so DESTINATION lib)
+install(DIRECTORY protocolstack infrastructure DESTINATION include/libazurewebsockets FILES_MATCHING PATTERN "*.h")
 
 #Set Flags has to be at bottom to overwrite above set default rules
 #set (CMAKE_CXX_STANDARD 14)

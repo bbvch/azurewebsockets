@@ -8,16 +8,16 @@
 #ifndef PROTOCOLSTACK_H
 #define PROTOCOLSTACK_H
 
-#include "application/ActiveApplication.h"
-#include "presentation/Presentation.h"
-#include "session/Session.h"
+//#include <application/ActiveApplication.h>
+#include <protocolstack/presentation/Presentation.h>
+#include <protocolstack/session/Session.h>
 
 #include <memory>
 
 class ProtocolStack
 {
 public:
-  std::unique_ptr<Application> application;
+  //std::unique_ptr<Application> application;
   std::unique_ptr<Presentation> presentation;
   std::unique_ptr<Session> session;
 };

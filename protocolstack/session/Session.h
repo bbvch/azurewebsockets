@@ -8,8 +8,8 @@
 #ifndef SESSION
 #define SESSION
 
-#include "Configuration.h"
-#include "protocolstack/presentation/Message.h"
+#include <protocolstack/session/Configuration.h>
+#include <protocolstack/presentation/Message.h>
 
 #include <string>
 #include <functional>

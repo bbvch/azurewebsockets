@@ -8,7 +8,7 @@
 #ifndef SESSION_FACTORY_H
 #define SESSION_FACTORY_H
 
-#include "Session.h"
+#include <protocolstack/session/Session.h>
 
 #include <infrastructure/Factory.h>
 

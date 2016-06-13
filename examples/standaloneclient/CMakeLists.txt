@@ -10,11 +10,9 @@ set(CMAKE_BINARY_DIR  ${builddir})
 
 set(ROOTDIR ../..)
 
-include_directories(${ROOTDIR}/protocolstack/session/)
-include_directories(${ROOTDIR})
-find_library(sharedlibs azurewebsockets websockets /usr/local/lib/azurewebsockets ${YOCTO_LIBRARY_PATH})
+include_directories(/usr/local/include/libazurewebsockets)
+find_library(sharedlibs azurewebsockets websockets /usr/local/lib ${YOCTO_LIBRARY_PATH})
 if(NOT sharedlibs)
-    #message("Libs path: ${YOCTO_LIBRARY_PATH}")
     essage(FATAL_ERROR "Did not find the required libraries azurewebsockets and websockets")
 endif(NOT sharedlibs)
 
@@ -25,7 +23,6 @@ file(GLOB CLIENT_SOURCES
 
 add_executable(standaloneclient ${CLIENT_SOURCES})
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/session)
-#target_link_libraries(standaloneclient azurewebsockets uamqp aziotsharedutil websockets_shared)
 target_link_libraries(standaloneclient ${sharedlibs})
 
 install(TARGETS standaloneclient DESTINATION bin)

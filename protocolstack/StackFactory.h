@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "ProtocolStack.h"
+#include <protocolstack/ProtocolStack.h>
 
 #ifndef STACKFACTORY_H
 #define STACKFACTORY_H

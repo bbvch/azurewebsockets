@@ -1,7 +1,7 @@
 extern "C" {
 #include "session.h"
 }
-#include "AzureAmqpWs.h"
+#include <protocolstack/session/AzureAmqpWs.h>
 #include <thread>
 
 //TODO move as much .h files here as possible

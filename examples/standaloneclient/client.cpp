@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "Session.h"
-#include "Factory.h"
+#include <protocolstack/session/Session.h>
+#include <protocolstack/session/Factory.h>
 
 #include <csignal>
 #include <memory>
