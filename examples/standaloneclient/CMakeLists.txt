@@ -10,11 +10,15 @@ set(CMAKE_BINARY_DIR  ${builddir})
 
 set(ROOTDIR ../..)
 
-include_directories(/usr/local/include/libazurewebsockets)
-find_library(sharedlibs azurewebsockets websockets /usr/local/lib ${YOCTO_LIBRARY_PATH})
+find_path(INCLUDE_DIRECTORIES libazurewebsockets)
+include_directories(${INCLUDE_DIRECTORIES}/libazurewebsockets)
+
+find_library(sharedlibs azurewebsockets websockets ${YOCTO_LIBRARY_PATH})
 if(NOT sharedlibs)
-    essage(FATAL_ERROR "Did not find the required libraries azurewebsockets and websockets")
+    message(FATAL_ERROR "Did not find the required libraries azurewebsockets and websockets")
 endif(NOT sharedlibs)
+
+
 
 file(GLOB CLIENT_SOURCES
     client.cpp
