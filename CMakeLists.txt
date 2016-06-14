@@ -72,7 +72,7 @@ protocolstack/session/iothub_certs/iothub_certs.c
 infrastructure/SasToken.cpp
 )
 #set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
-target_link_libraries(azurewebsockets pthread PocoUtil jsoncpp PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
+target_link_libraries(azurewebsockets pthread PocoUtil PocoFoundation uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets_shared uuid)
 set_target_properties(azurewebsockets PROPERTIES VERSION ${Main_VERSION_MAJOR}                                            SOVERSION ${Main_VERSION_MAJOR})
 install(TARGETS azurewebsockets DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libuamqp.so DESTINATION lib)
