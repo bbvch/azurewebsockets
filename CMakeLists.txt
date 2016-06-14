@@ -30,7 +30,6 @@ include_directories (".")
 add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/" EXCLUDE_FROM_ALL)
 
 add_library(azurewebsockets SHARED ${AZUREWEBSOCKETS_SOURCES})
-#set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
 find_library(poco_path PocoFoundation )
 find_library(cryptopp_path crypto++)
 if((NOT poco_path) OR (NOT cryptopp_path))
@@ -47,5 +46,6 @@ install(DIRECTORY protocolstack infrastructure DESTINATION include/libazurewebso
 
 #Set Flags has to be at bottom to overwrite above set default rules
 #set (CMAKE_CXX_STANDARD 14)
+#set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -std=c++14")
-set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu1x")
+#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu1x")
