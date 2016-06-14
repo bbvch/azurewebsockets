@@ -57,7 +57,8 @@ file(GLOB LIBRARY_HEADERS
     protocolstack/presentation/*.h
     )
 
-include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/azure-c-shared-utility/c/inc")
+include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/azure-c-shared-utility/inc")
+include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/inc/azure_uamqp_c")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/inc")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/protocolstack/session/iothub_certs)
 include_directories (".")
@@ -77,7 +78,7 @@ install(TARGETS azurewebsockets DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libuamqp.so DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so DESTINATION lib)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libwebsockets.so.6 DESTINATION lib)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/azure-c-shared-utility/c/libaziotsharedutil.so DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/azure-c-shared-utility/libaziotsharedutil.so DESTINATION lib)
 install(DIRECTORY protocolstack infrastructure DESTINATION include/libazurewebsockets FILES_MATCHING PATTERN "*.h")
 
 #Set Flags has to be at bottom to overwrite above set default rules

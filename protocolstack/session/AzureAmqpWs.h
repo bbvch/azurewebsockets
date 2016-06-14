@@ -8,7 +8,7 @@ extern "C"
 //#include <stdio.h>
 //#include <stdbool.h>
 
-#include "platform.h"
+#include "azure_c_shared_utility/platform.h"
 #include "message_sender.h"
 #include "message_receiver.h"
 #include "message.h"
