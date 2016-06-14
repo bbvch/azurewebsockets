@@ -5,6 +5,7 @@ addons:
         sources:
             #- llvm-toolchain-precise
             - ubuntu-toolchain-r-test
+            - kalakris-cmake
         packages:
             #- clang-3.7
             - g++-5
