@@ -10,14 +10,13 @@ set(CMAKE_BINARY_DIR  ${builddir})
 
 set(ROOTDIR ../..)
 
-find_path(INCLUDE_DIRECTORIES libazurewebsockets ${YOCTO_INCLUDE_PATH})
+find_path(INCLUDE_DIRECTORIES libazurewebsockets)
 if(NOT INCLUDE_DIRECTORIES)
-message("--->heeeere--->${YOCTO_INCLUDE_PATH}")
 message(FATAL_ERROR "Did not find the include directory")
 endif(NOT INCLUDE_DIRECTORIES)
 include_directories(${INCLUDE_DIRECTORIES}/libazurewebsockets)
 
-find_library(sharedlibs azurewebsockets websockets ${YOCTO_LIBRARY_PATH})
+find_library(sharedlibs azurewebsockets websockets)
 if(NOT sharedlibs)
     message(FATAL_ERROR "Did not find the required libraries azurewebsockets and websockets")
 endif(NOT sharedlibs)
