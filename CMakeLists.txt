@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.0)
 set (Main_VERSION_MAJOR 0)
 set (Main_VERSION_MINOR 1)
+include(CheckCXXCompilerFlag)
 
 add_definitions(-DNO_LOGGING)
 set (use_wsio ON CACHE INTERNAL "")
@@ -44,8 +45,17 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/libwebsockets/lib/libweb
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/azure-uamqp-c/azure-c-shared-utility/libaziotsharedutil.so DESTINATION lib)
 install(DIRECTORY protocolstack infrastructure DESTINATION include/libazurewebsockets FILES_MATCHING PATTERN "*.h")
 
+#Check if compiler supports c++14
+CHECK_CXX_COMPILER_FLAG(-std=c++14 compiler_supports_cpp14)
+if(NOT compiler_supports_cpp14)
+    message(FATAL_ERROR "Compiler does not seem to support needed c++14 flag")
+endif(NOT compiler_supports_cpp14)
+
 #Set Flags has to be at bottom to overwrite above set default rules
-#set (CMAKE_CXX_STANDARD 14)
-#set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -std=c++14")
-#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu1x")
+#Use newer CMAKE_CXX_STANDARD setting on new cmake-versions, fallback to setting it in CXX_FLAGS
+if( ${CMAKE_VERSION} VERSION_GREATER "3.1")
+    set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
+else( ${CMAKE_VERSION} VERSION_GREATER "3.1")
+    message("Cmake version smaller than 3.1 - fallback to adding c++14 flag")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -std=c++14")
+endif( ${CMAKE_VERSION} VERSION_GREATER "3.1")
