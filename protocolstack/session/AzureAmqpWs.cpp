@@ -4,10 +4,9 @@ extern "C" {
 #include <protocolstack/session/AzureAmqpWs.h>
 #include <thread>
 
-//TODO move as much .h files here as possible
-//TODO not everything is multithread safe
+//TODO this was not designed with multiple threads in mind, errors might arise in MT environments
 //TODO how to handle error conditions - now just throwing
-//TODO where to do connection_dowork (thread?)
+//TODO what exactly happens on connection loss or sporadic dis-connections?
 
 extern const char iothub_certs[];
 
@@ -51,12 +50,11 @@ void AzureAmqpWs::on_amqp_management_state_chaged(void* /*context*/, AMQP_MANAGE
 void AzureAmqpWs::addMessagePending()
 {
     //TODO not multithread safe
-    messagesPending_++;
+    ++messagesPending_;
 }
 
 void AzureAmqpWs::doConnectionWork()
 {
-    //SESSION_INSTANCE_TAG* session_instance = (SESSION_INSTANCE_TAG*)session_;
     while(!quitting_) {
         connection_dowork(connection_);
     }
@@ -171,8 +169,10 @@ void AzureAmqpWs::connect()
     amqpvalue_destroy(target);
     amqpvalue_destroy(rcvsource);
     amqpvalue_destroy(rcvtarget);
+
+    /* create message sender */
     messageSender_ = messagesender_create(senderLink_, NULL, NULL, NULL);
-    /* Message receiver seems to have to be created before sender, else connection_dowork doesn't seem to function properly */
+    /* create message receiver */
     messageReceiver_ = messagereceiver_create(receiverLink_, NULL, NULL);
 
     if ((messageReceiver_ == NULL) ||
@@ -180,12 +180,7 @@ void AzureAmqpWs::connect()
     {
         std::runtime_error("Couldn't open message receiver at"+__LINE__);
     }
-    if(messageReceiver_ != NULL)
-    {
-        //TODO in own thread or repeatedly executed?
-       // connection_dowork(connection_);
 
-    }
     workerThread_ = std::make_unique<std::thread>(&AzureAmqpWs::doConnectionWork, this);
 
     return;
@@ -194,10 +189,7 @@ void AzureAmqpWs::connect()
 void AzureAmqpWs::send(const std::string &message)
 {
     MESSAGE_HANDLE messageHandle = message_create();
-    /* create a message sender */
 
-    //TODO investigate why following does not work / make it work for binary data
-    //const unsigned char *message_content{message.asBinary().data()};
     const unsigned char *message_content{reinterpret_cast <unsigned char const *>(message.c_str())};
 
     BINARY_DATA binary_data = { message_content, message.size() };
@@ -211,10 +203,6 @@ void AzureAmqpWs::send(const std::string &message)
     {
         messagesender_send(messageSender_, messageHandle, on_message_send_complete, this);
         addMessagePending();
-
-        //TODO: connection_dowork maybe in own thread
-        //while(messagesPending_ > 0)
-         //  connection_dowork(connection_);
         message_destroy(messageHandle);
     }
     else
@@ -238,7 +226,6 @@ void AzureAmqpWs::close()
     cbs_destroy(cbs_);
     link_destroy(senderLink_);
     session_destroy(session_);
-    //workerThread_.reset();
     workerThread_->join();
     connection_destroy(connection_);
     xio_destroy(saslIo_);
