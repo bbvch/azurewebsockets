@@ -2,16 +2,18 @@
  * (C) Copyright 2016
  * Simon Egli & Urs Fässler, bbv Software Services, http://bbv.ch
  *
- * SPDX-License-Identifier:	GPL-3.0+
+ * SPDX-License-Identifier:	GPL-3.0+ or LGPL-3.0+
  */
 
-#include "Session.h"
-#include "Factory.h"
+#include <protocolstack/session/Session.h>
+#include <protocolstack/session/Factory.h>
 
 #include <csignal>
 #include <memory>
 #include <iostream>
 #include <set>
+#include <vector>
+#include <string>
 
 class Configuration :
         public session::Configuration
@@ -60,14 +62,13 @@ static void waitForTermination()
     }
 }
 
-static void receiver(const presentation::Message& message)
+static void receiver(const std::string& message)
 {
-    std::cout << "received message: " << message.asString() << std::endl;
+    std::cout << "received message: " << message << std::endl;
 }
 
 int main(int argc, char **argv)
 {
-    const Factory<Session*> factory = session::factory();
     std::cout << "start...\n";
     const std::vector<std::string> arg{argv, argv+argc};
     std::cout << "vector done...\n";
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
     //std::cout << "parsed commandline...\n";
 
 
-    std::unique_ptr<Session> session{factory.produce("session")};
+    std::unique_ptr<Session> session{session::produce()};
     if(!session)
         throw std::runtime_error("Was not able to create session");
     //std::cout << "Created session...\n";

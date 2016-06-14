@@ -1,23 +1,28 @@
+/*
+ * (C) Copyright 2016
+ * Simon Egli, bbv Software Services, http://bbv.ch
+ *
+ * SPDX-License-Identifier:	GPL-3.0+ or LGPL-3.0+
+ */
 extern "C" {
 #include "session.h"
 }
-#include "AzureAmqpWs.h"
+#include <protocolstack/session/AzureAmqpWs.h>
 #include <thread>
 
-//TODO move as much .h files here as possible
-//TODO not everything is multithread safe
+//TODO this was not designed with multiple threads in mind, errors might arise in MT environments
 //TODO how to handle error conditions - now just throwing
-//TODO where to do connection_dowork (thread?)
+//TODO what exactly happens on connection loss or sporadic dis-connections?
 
 extern const char iothub_certs[];
 
 const long saslExpirationTime = 60 * 60 * 24 * 365 * 10; //expiration 10 years
 
-static presentation::Message convertMessage(MESSAGE_HANDLE message)
+static std::string convertMessage(MESSAGE_HANDLE message)
 {
     BINARY_DATA data;
     message_get_body_amqp_data(message, 0, &data);
-    return presentation::Message{data.bytes, data.length};
+    return std::string{(const char *)data.bytes, data.length};
 }
 static Session::Callback toCallback( void *ptr)
 {
@@ -51,12 +56,11 @@ void AzureAmqpWs::on_amqp_management_state_chaged(void* /*context*/, AMQP_MANAGE
 void AzureAmqpWs::addMessagePending()
 {
     //TODO not multithread safe
-    messagesPending_++;
+    ++messagesPending_;
 }
 
 void AzureAmqpWs::doConnectionWork()
 {
-    //SESSION_INSTANCE_TAG* session_instance = (SESSION_INSTANCE_TAG*)session_;
     while(!quitting_) {
         connection_dowork(connection_);
     }
@@ -92,7 +96,7 @@ void on_cbs_operation_complete(void* context, CBS_OPERATION_RESULT cbs_operation
     if (cbs_operation_result == CBS_OPERATION_RESULT_OK)
         instance->setAuth(true);
     else
-        throw std::runtime_error("Error in on_cbs_operation complete at"+__LINE__);
+        throw std::runtime_error("Error in on_cbs_operation complete");
 }
 
 AzureAmqpWs::AzureAmqpWs()
@@ -157,7 +161,7 @@ void AzureAmqpWs::connect()
     AMQP_VALUE rcvtarget = messaging_create_target("ingress-rx");
     receiverLink_ = link_create(session_, "receiver-link", role_receiver, rcvsource, rcvtarget);
     if(!receiverLink_)
-        throw std::runtime_error("Error in creating receiver link at "+__LINE__);
+        throw std::runtime_error("Error in creating receiver link");
     link_set_rcv_settle_mode(receiverLink_, receiver_settle_mode_first);
     (void)link_set_max_message_size(receiverLink_, 65536);
 
@@ -165,58 +169,46 @@ void AzureAmqpWs::connect()
     AMQP_VALUE target = messaging_create_target(("amqps://"+host_ +"/devices/"+ deviceId_+ "/messages/events").c_str());
     senderLink_ = link_create(session_, "sender-link", role_sender, source, target);
     if(!senderLink_)
-        throw std::runtime_error("Error in creating sender link at "+__LINE__);
+        throw std::runtime_error("Error in creating sender link");
 
     amqpvalue_destroy(source);
     amqpvalue_destroy(target);
     amqpvalue_destroy(rcvsource);
     amqpvalue_destroy(rcvtarget);
+
+    /* create message sender */
     messageSender_ = messagesender_create(senderLink_, NULL, NULL, NULL);
-    /* Message receiver seems to have to be created before sender, else connection_dowork doesn't seem to function properly */
+    /* create message receiver */
     messageReceiver_ = messagereceiver_create(receiverLink_, NULL, NULL);
 
     if ((messageReceiver_ == NULL) ||
             (messagereceiver_open(messageReceiver_, on_message_received, &receivedFunction_) != 0))
     {
-        std::runtime_error("Couldn't open message receiver at"+__LINE__);
+        std::runtime_error("Couldn't open message receiver");
     }
-    if(messageReceiver_ != NULL)
-    {
-        //TODO in own thread or repeatedly executed?
-       // connection_dowork(connection_);
 
-    }
     workerThread_ = std::make_unique<std::thread>(&AzureAmqpWs::doConnectionWork, this);
 
     return;
 }
 
-void AzureAmqpWs::send(const presentation::Message &message)
+void AzureAmqpWs::send(const std::string &message)
 {
     MESSAGE_HANDLE messageHandle = message_create();
-    /* create a message sender */
-    std::string messageString = message.asString();
 
-    //TODO investigate why following does not work / make it work for binary data
-    //const unsigned char *message_content{message.asBinary().data()};
-    const unsigned char *message_content{reinterpret_cast <unsigned char const *>(messageString.c_str())};
+    const unsigned char *message_content{reinterpret_cast <unsigned char const *>(message.c_str())};
 
-    size_t message_size = message.asBinary().size();
-    BINARY_DATA binary_data = { message_content, message_size };
+    BINARY_DATA binary_data = { message_content, message.size() };
     message_add_body_amqp_data(messageHandle, binary_data);
 
     if(!messageSender_)
-        throw std::runtime_error("MessageSender is not defined at "+__LINE__);
+        throw std::runtime_error("MessageSender is not defined");
 
     //printf("Opening message sender\n");
     if (messagesender_open(messageSender_) == 0)
     {
         messagesender_send(messageSender_, messageHandle, on_message_send_complete, this);
         addMessagePending();
-
-        //TODO: connection_dowork maybe in own thread
-        //while(messagesPending_ > 0)
-         //  connection_dowork(connection_);
         message_destroy(messageHandle);
     }
     else
@@ -240,7 +232,6 @@ void AzureAmqpWs::close()
     cbs_destroy(cbs_);
     link_destroy(senderLink_);
     session_destroy(session_);
-    //workerThread_.reset();
     workerThread_->join();
     connection_destroy(connection_);
     xio_destroy(saslIo_);

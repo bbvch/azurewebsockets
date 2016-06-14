@@ -2,10 +2,10 @@
  * (C) Copyright 2016
  * Urs Fässler, bbv Software Services, http://bbv.ch
  *
- * SPDX-License-Identifier:	GPL-3.0+
+ * SPDX-License-Identifier:	GPL-3.0+ or LGPL-3.0+
  */
 
-#include "SasToken.h"
+#include <infrastructure/SasToken.h>
 
 #include <crypto++/hmac.h>
 #include <crypto++/sha.h>
@@ -111,8 +111,8 @@ SasTokenFactory::SasTokenFactory(const std::string &_encodedKey, const std::stri
 SasTokenFactory::SasTokenFactory(const std::string &_encodedKey, const std::string &_scope, long long _seconds):
     key{sastoken::decode(_encodedKey)},
     scope{_scope},
-    getTime{currentTimeReader()},
-    validityDuration{std::chrono::seconds(_seconds)}
+    validityDuration{std::chrono::seconds(_seconds)},
+    getTime{currentTimeReader()}
 {
 }
 
