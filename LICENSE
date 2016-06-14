@@ -1,0 +1,9 @@
+LICENSE information: 
+
+azure-uaqmp-c: 	Coming from https://github.com/Azure/azure-uamqp-c - MIT License. 
+		Please see azure-uamqp-c/LICENSE for further details.
+
+The rest was developed by bbv Software Services AG and is published as LGPL-3.0. 
+Due to parts of the code steming from https://github.com/bbvch/streetlightd
+the code is double-tagged as GPL-3.0 too. 
+bbv Software Services AG however grants you LGPL-3.0 files of all files published here, over which it has copyright (see azure-uamqp-c for files it does not have copyright). 
