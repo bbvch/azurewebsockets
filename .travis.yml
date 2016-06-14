@@ -28,7 +28,7 @@ script:
   - cd build
   - cmake ..
   - make
-  - make install
+  - sudo make install
   - cd ../examples/standaloneclient
   - mkdir build
   - cd build
