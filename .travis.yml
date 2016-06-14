@@ -1,0 +1,20 @@
+dist: trusty
+language: cpp
+
+before_install:
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get install build-essential cmake libcrypto++-dev libcurl4-openssl-dev libpoco-dev libssl-dev
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - make install
+  - cd ../examples/standaloneclient
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
