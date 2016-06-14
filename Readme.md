@@ -1,4 +1,4 @@
-# azurewebsockets
+# azurewebsockets [![Build Status](https://travis-ci.org/bbvch/azurewebsockets.svg?branch=master)](https://travis-ci.org/bbvch/azurewebsockets)
 
 This is a library which connects to the Microsoft Azure Cloud via websockets.
 It was spun off from [streetlightd](https://github.com/bbvch/streetlightd)
