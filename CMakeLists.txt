@@ -9,47 +9,12 @@ project (azurewebsockets)
 set(CMAKE_BUILD_TYPE Release)
 set(rootdir ${CMAKE_CURRENT_SOURCE_DIR}../../)
 
-file(GLOB RAW_SOURCES
-    *.h
-    protocolstack/*.h
-    protocolstack/*.cpp
-
-    protocolstack/presentation/*.cpp
-    protocolstack/presentation/*.h
-    protocolstack/application/*.cpp
-    protocolstack/application/*.h
-    protocolstack/application/message/*.h
-    protocolstack/application/message/*.cpp
-    infrastructure/*.cpp
-    infrastructure/*.h
-    infrastructure/cli/*.cpp
-    infrastructure/cli/*.h
-    infrastructure/concurrency/*.cpp
-    infrastructure/concurrency/*.h
-    )
-
-file(GLOB SAS_SOURCES
-    ${rootdir}/infrastructure/SasToken.cpp
-    ${rootdir}/infrastructure/SasToken.h
-    ${rootdir}/infrastructure/cli/PocoParser.cpp
-    ${rootdir}/infrastructure/cli/PocoParser.h
-    )
-
-file(GLOB SESSION_SOURCES
+file(GLOB AZUREWEBSOCKETS_SOURCES
     infrastructure/SasToken.cpp
     infrastructure/SasToken.h
-    infrastructure/concurrency/Timer.cpp
-    infrastructure/concurrency/Timer.h
-    protocolstack/presentation/Message.cpp
-    protocolstack/presentation/Message.h
     protocolstack/session/*.cpp
     protocolstack/session/*.h
-    protocolstack/session/mqtt/*.h
-    protocolstack/session/mqtt/*.cpp
-    protocolstack/session/http/*.h
-    protocolstack/session/http/*.cpp
-    protocolstack/session/amqp/AmqpSession.cpp
-    protocolstack/session/amqp_websockets/iothub_certs.c
+    azure-uamqp-c/samples/websockets_sample/iothub_certs.c
     )
 
 file(GLOB LIBRARY_HEADERS
@@ -60,17 +25,11 @@ file(GLOB LIBRARY_HEADERS
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/azure-c-shared-utility/inc")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/inc/azure_uamqp_c")
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/inc")
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/protocolstack/session/iothub_certs)
 include_directories (".")
 
 add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/azure-uamqp-c/" EXCLUDE_FROM_ALL)
 
-add_library(azurewebsockets SHARED
-protocolstack/session/AzureAmqpWs.cpp 
-protocolstack/session/Factory.cpp 
-protocolstack/session/iothub_certs/iothub_certs.c
-infrastructure/SasToken.cpp
-)
+add_library(azurewebsockets SHARED ${AZUREWEBSOCKETS_SOURCES})
 #set_property(TARGET azurewebsockets PROPERTY CXX_STANDARD 14)
 find_library(poco_path PocoFoundation )
 find_library(cryptopp_path crypto++)
@@ -90,4 +49,3 @@ install(DIRECTORY protocolstack infrastructure DESTINATION include/libazurewebso
 #set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -std=c++14")
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu1x")
-#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")

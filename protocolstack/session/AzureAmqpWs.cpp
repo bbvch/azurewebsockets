@@ -1,3 +1,9 @@
+/*
+ * (C) Copyright 2016
+ * Simon Egli, bbv Software Services, http://bbv.ch
+ *
+ * SPDX-License-Identifier:	GPL-3.0+ or LGPL-3.0+
+ */
 extern "C" {
 #include "session.h"
 }
