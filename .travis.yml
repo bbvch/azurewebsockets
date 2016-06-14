@@ -1,11 +1,23 @@
 dist: trusty
 language: cpp
-
-before_install:
-  - sudo apt-get update -qq
-
+addons:
+    apt:
+        sources:
+            - llvm-toolchain-precise
+            - ubuntu-toolchain-r-test
+        packages:
+            - clang-3.7
+            - g++-5
+            - gcc-5
+            - build-essential
+            - libcrypto++-dev
+            - libcurl4-openssl-dev
+            - libpoco-dev
+            - libssl-dev
+            - uuid-dev
 install:
-  - sudo apt-get install -y build-essential cmake libcrypto++-dev libcurl4-openssl-dev libpoco-dev libssl-dev uuid-dev
+    - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+    - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
 
 script:
   - mkdir build
