@@ -90,7 +90,7 @@ void on_cbs_operation_complete(void* context, CBS_OPERATION_RESULT cbs_operation
     if (cbs_operation_result == CBS_OPERATION_RESULT_OK)
         instance->setAuth(true);
     else
-        throw std::runtime_error("Error in on_cbs_operation complete at"+__LINE__);
+        throw std::runtime_error("Error in on_cbs_operation complete");
 }
 
 AzureAmqpWs::AzureAmqpWs()
@@ -155,7 +155,7 @@ void AzureAmqpWs::connect()
     AMQP_VALUE rcvtarget = messaging_create_target("ingress-rx");
     receiverLink_ = link_create(session_, "receiver-link", role_receiver, rcvsource, rcvtarget);
     if(!receiverLink_)
-        throw std::runtime_error("Error in creating receiver link at "+__LINE__);
+        throw std::runtime_error("Error in creating receiver link");
     link_set_rcv_settle_mode(receiverLink_, receiver_settle_mode_first);
     (void)link_set_max_message_size(receiverLink_, 65536);
 
@@ -163,7 +163,7 @@ void AzureAmqpWs::connect()
     AMQP_VALUE target = messaging_create_target(("amqps://"+host_ +"/devices/"+ deviceId_+ "/messages/events").c_str());
     senderLink_ = link_create(session_, "sender-link", role_sender, source, target);
     if(!senderLink_)
-        throw std::runtime_error("Error in creating sender link at "+__LINE__);
+        throw std::runtime_error("Error in creating sender link");
 
     amqpvalue_destroy(source);
     amqpvalue_destroy(target);
@@ -178,7 +178,7 @@ void AzureAmqpWs::connect()
     if ((messageReceiver_ == NULL) ||
             (messagereceiver_open(messageReceiver_, on_message_received, &receivedFunction_) != 0))
     {
-        std::runtime_error("Couldn't open message receiver at"+__LINE__);
+        std::runtime_error("Couldn't open message receiver");
     }
 
     workerThread_ = std::make_unique<std::thread>(&AzureAmqpWs::doConnectionWork, this);
@@ -196,7 +196,7 @@ void AzureAmqpWs::send(const std::string &message)
     message_add_body_amqp_data(messageHandle, binary_data);
 
     if(!messageSender_)
-        throw std::runtime_error("MessageSender is not defined at "+__LINE__);
+        throw std::runtime_error("MessageSender is not defined");
 
     //printf("Opening message sender\n");
     if (messagesender_open(messageSender_) == 0)
